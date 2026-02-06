@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vibe Bagshop</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="nav">
+      <div class="nav__inner">
+        <a class="brand" href="#top" aria-label="Vibe Bagshop 홈">
+          <span class="brand__mark"></span>
+          <span class="brand__name">Vibe Bagshop</span>
+        </a>
+        <nav class="menu" aria-label="주요 메뉴">
+          <a href="#new" class="menu__item">신상품</a>
+          <a href="#popular" class="menu__item">인기</a>
+          <a href="#md" class="menu__item">MD추천</a>
+          <a href="#cs" class="menu__item">고객센터</a>
+        </nav>
+        <div class="nav__actions" aria-label="빠른 액션">
+          <a href="admin.html" class="icon-btn" aria-label="상품 등록">➕</a>
+          <button class="icon-btn" id="searchToggleBtn" type="button" aria-label="검색">⌕</button>
+          <button class="icon-btn" id="cartBtn" type="button" aria-label="장바구니">
+            🛍
+            <span id="cartBadge" class="cart__badge" style="display:none;">0</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- 검색바 -->
+    <div id="searchBar" class="search-bar" aria-label="검색">
+      <div class="search-bar__inner">
+        <div class="container">
+          <div class="search-bar__form">
+            <button class="search-bar__icon" aria-hidden="true">⌕</button>
+            <input class="search-bar__input" id="searchInput" type="text" placeholder="상품명으로 검색" autocomplete="off" />
+            <button id="closeSearchBtn" class="search-bar__close" type="button" aria-label="검색 닫기">✕</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <main id="top" class="main">
+      <section id="new" class="section">
+        <div class="container">
+          <div class="section__head">
+            <div>
+              <p class="eyebrow">신상품</p>
+              <h2 class="section-title">이번 주 새로 들어온 가방</h2>
+            </div>
+            <button id="newMoreBtn" class="btn btn--ghost" type="button">더보기</button>
+          </div>
+
+          <div class="slider" aria-label="신상품 슬라이더">
+            <button class="slider__nav" id="newPrevBtn" type="button" aria-label="이전">‹</button>
+            <div class="slider__viewport" id="newSliderViewport" tabindex="0">
+              <div class="slider__track" id="newTrack"></div>
+            </div>
+            <button class="slider__nav" id="newNextBtn" type="button" aria-label="다음">›</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="md" class="section hero">
+        <div class="hero__bg"></div>
+        <div class="container hero__inner">
+          <div class="hero__copy">
+            <p class="eyebrow">MD 추천</p>
+            <h1 class="headline">오늘의 쇼케이스</h1>
+            <p class="subhead">빛에 따라 달라지는 컬러, 손에 착 감기는 실루엣.</p>
+
+            <div class="product-meta">
+              <div class="product-meta__row">
+                <span class="product-name" id="mdName">VIBE Curve Mini</span>
+              </div>
+              <div class="product-meta__row">
+                <span class="price" id="mdPrice">₩189,000</span>
+                <span class="badge">무료배송</span>
+              </div>
+            </div>
+
+            <div class="swatches" aria-label="가방 색상 선택">
+              <button class="swatch" type="button" data-color="#111827" aria-label="블랙"></button>
+              <button class="swatch" type="button" data-color="#8B5CF6" aria-label="바이올렛"></button>
+              <button class="swatch" type="button" data-color="#0EA5E9" aria-label="스카이"></button>
+              <button class="swatch" type="button" data-color="#F97316" aria-label="오렌지"></button>
+              <button class="swatch" type="button" data-color="#E11D48" aria-label="로즈"></button>
+            </div>
+
+            <div class="cta">
+              <button class="btn btn--primary" type="button">구매하기</button>
+              <button class="btn btn--ghost" type="button">상세보기</button>
+            </div>
+          </div>
+
+          <div class="hero__stage" aria-label="3D 가방 쇼케이스">
+            <div class="stage__frame">
+              <canvas id="bagCanvas" class="stage__canvas" aria-label="3D 가방 캔버스"></canvas>
+              <div class="stage__hint">드래그 없이도 자동으로 회전합니다</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="popular" class="section">
+        <div class="container">
+          <div class="section__head">
+            <div>
+              <p class="eyebrow">인기상품</p>
+              <h2 class="section-title">지금 가장 많이 찾는 가방</h2>
+            </div>
+            <button id="moreBtn" class="btn btn--ghost" type="button">더보기</button>
+          </div>
+
+          <div class="slider" aria-label="인기상품 슬라이더">
+            <button class="slider__nav" id="prevBtn" type="button" aria-label="이전">‹</button>
+            <div class="slider__viewport" id="sliderViewport" tabindex="0">
+              <div class="slider__track" id="popularTrack"></div>
+            </div>
+            <button class="slider__nav" id="nextBtn" type="button" aria-label="다음">›</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="cs" class="section footer">
+        <div class="container footer__inner">
+          <div>
+            <h3 class="footer__title">고객센터</h3>
+            <p class="footer__text">평일 10:00 - 18:00 / 점심 12:00 - 13:00</p>
+          </div>
+          <div>
+            <p class="footer__text">© Vibe Bagshop</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <dialog id="newMoreModal" class="modal" aria-label="전체 신상품">
+      <div class="modal__inner">
+        <div class="modal__head">
+          <h3 class="modal__title">전체 신상품</h3>
+          <button id="closeNewModalBtn" class="icon-btn" type="button" aria-label="닫기">✕</button>
+        </div>
+        <div class="modal__grid" id="newModalGrid"></div>
+      </div>
+    </dialog>
+
+    <dialog id="moreModal" class="modal" aria-label="전체 인기상품">
+      <div class="modal__inner">
+        <div class="modal__head">
+          <h3 class="modal__title">전체 인기상품</h3>
+          <button id="closeModalBtn" class="icon-btn" type="button" aria-label="닫기">✕</button>
+        </div>
+        <div class="modal__grid" id="modalGrid"></div>
+      </div>
+    </dialog>
+
+    <dialog id="detailModal" class="modal modal--detail" aria-label="상품 상세">
+      <div class="modal__inner">
+        <button id="closeDetailBtn" class="modal__close" type="button" aria-label="닫기">✕</button>
+        <div class="modal__head">
+          <h3 class="modal__title">상품 상세</h3>
+        </div>
+        <div class="detail__content">
+          <div class="detail__img" id="detailImg"></div>
+          <div class="detail__info">
+            <h2 class="detail__name" id="detailName"></h2>
+            <p class="detail__price" id="detailPrice"></p>
+            <p class="detail__desc" id="detailDesc"></p>
+            <div class="detail__cta">
+              <button class="btn btn--primary">구매하기</button>
+              <button class="btn btn--ghost" id="detailAddToCartBtn">장바구니</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </dialog>
+
+    <!-- 장바구니 사이드바 -->
+    <div id="cartSidebar" class="cart-sidebar" aria-label="장바구니">
+      <div class="cart-sidebar__inner">
+        <div class="cart-sidebar__head">
+          <h3 class="cart-sidebar__title">장바구니</h3>
+          <button id="closeCartBtn" class="icon-btn" type="button" aria-label="닫기">✕</button>
+        </div>
+        <div class="cart-sidebar__body">
+          <div id="cartItems" class="cart-items"></div>
+          <div id="cartEmpty" class="cart-empty" style="display:none;">
+            <p style="font-size:48px;">🛍</p>
+            <p>장바구니가 비어있습니다.</p>
+          </div>
+        </div>
+        <div class="cart-sidebar__foot">
+          <div class="cart-total">
+            <span>총계</span>
+            <span id="cartTotal" class="cart-total__price">₩0</span>
+          </div>
+          <button class="btn btn--primary" style="width:100%;">주문하기</button>
+        </div>
+      </div>
+      <div id="cartOverlay" class="cart-overlay"></div>
+    </div>
+
+    <!-- 장바구니 알림 팝업 -->
+    <dialog id="cartToast" class="toast-modal" aria-label="장바구니 알림">
+      <div class="toast-modal__inner">
+        <p class="toast-modal__msg">장바구니에 담겼습니다.</p>
+        <button id="cartToastCloseBtn" class="btn btn--primary">확인</button>
+      </div>
+    </dialog>
+
+    <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
