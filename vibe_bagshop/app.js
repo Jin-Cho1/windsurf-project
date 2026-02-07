@@ -1,6 +1,7 @@
-// Three.js MD 추천 3D 프리미티브 + 색상 변경
-let scene, camera, renderer, bag;
+// Three.js MD 추천 3D 모델 로드 + 인터랙션
+let scene, camera, renderer, bag, controls;
 let currentColor = '#111827';
+let isAutoRotating = true;
 
 function initThree() {
   const canvas = document.getElementById('bagCanvas');
@@ -29,7 +30,108 @@ function initThree() {
   directional.position.set(5, 5, 5);
   scene.add(directional);
 
-  // Geometry: 임시 가방 형태 (Torus + Box 조합)
+  // OrbitControls for user interaction
+  controls = new THREE.OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.05;
+  controls.enableZoom = false;
+  controls.autoRotate = isAutoRotating;
+  controls.autoRotateSpeed = 2.0;
+  
+  // Load 3D model
+  load3DModel();
+  
+  // Animation
+  function animate() {
+    requestAnimationFrame(animate);
+    controls.update();
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  // Resize
+  function onResize() {
+    const w = canvas.clientWidth;
+    const h = canvas.clientHeight;
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w, h);
+  }
+  window.addEventListener('resize', onResize);
+  
+  // User interaction events
+  canvas.addEventListener('mousedown', () => {
+    isAutoRotating = false;
+    controls.autoRotate = false;
+  });
+  
+  canvas.addEventListener('mouseup', () => {
+    setTimeout(() => {
+      isAutoRotating = true;
+      controls.autoRotate = true;
+    }, 3000); // 3초 후 다시 자동 회전
+  });
+}
+
+// 3D 모델 로드 함수
+function load3DModel() {
+  const loader = new THREE.GLTFLoader();
+  
+  // 로딩 인디케이터 표시 (선택사항)
+  const canvas = document.getElementById('bagCanvas');
+  const hint = document.querySelector('.stage__hint');
+  if (hint) {
+    hint.textContent = '3D 모델 로딩 중...';
+  }
+  
+  loader.load(
+    './red handbag 3d model.glb',
+    function (gltf) {
+      // 모델 로드 성공
+      bag = gltf.scene;
+      
+      // 모델 크기 조정 및 위치 설정
+      const box = new THREE.Box3().setFromObject(bag);
+      const center = box.getCenter(new THREE.Vector3());
+      const size = box.getSize(new THREE.Vector3());
+      
+      // 모델 중앙 정렬
+      bag.position.x = -center.x;
+      bag.position.y = -center.y;
+      bag.position.z = -center.z;
+      
+      // 모델 크기 조정 (화면에 맞게)
+      const maxDim = Math.max(size.x, size.y, size.z);
+      const scale = 2.5 / maxDim;
+      bag.scale.multiplyScalar(scale);
+      
+      scene.add(bag);
+      
+      // 로딩 완료 힌트 업데이트
+      if (hint) {
+        hint.textContent = '드래그하여 회전시킬 수 있습니다';
+      }
+      
+      console.log('3D 모델이 성공적으로 로드되었습니다.');
+    },
+    function (progress) {
+      // 로딩 진행률 (선택사항)
+      console.log('로딩 진행률:', (progress.loaded / progress.total * 100) + '%');
+    },
+    function (error) {
+      // 로딩 실패 시 기본 도형으로 대체
+      console.error('3D 모델 로딩 실패:', error);
+      createFallbackBag();
+      
+      if (hint) {
+        hint.textContent = '기본 3D 모델을 표시합니다';
+      }
+    }
+  );
+}
+
+// 대체용 기본 가방 모델 생성
+function createFallbackBag() {
   const group = new THREE.Group();
 
   // Body (박스)
@@ -52,24 +154,6 @@ function initThree() {
 
   bag = group;
   scene.add(bag);
-
-  // Animation
-  function animate() {
-    requestAnimationFrame(animate);
-    bag.rotation.y += 0.008;
-    renderer.render(scene, camera);
-  }
-  animate();
-
-  // Resize
-  function onResize() {
-    const w = canvas.clientWidth;
-    const h = canvas.clientHeight;
-    camera.aspect = w / h;
-    camera.updateProjectionMatrix();
-    renderer.setSize(w, h);
-  }
-  window.addEventListener('resize', onResize);
 }
 
 // 색상 변경
